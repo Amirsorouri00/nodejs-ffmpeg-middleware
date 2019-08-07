@@ -1,5 +1,4 @@
 var HLSServer = require('hls-server')
-// const express = require('express');
 var http = require('http');
 var fs = require('fs');
 var server = http.createServer()
@@ -28,9 +27,6 @@ var hls = new HLSServer(server, {
     }
   }
 })
-
-
-// http://127.0.0.1:8000/streams/stream.m3u8
 
 function yourMiddleware(req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
