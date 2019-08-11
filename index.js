@@ -29,8 +29,8 @@ var hls = new HLSServer(server, {
         // "req" is the http request
         // "callback" must be called with error-first arguments
         console.log("Inside getManifestStream");
-        subprocess.send('server');
-        m3ToConvertor(null);
+        // subprocess.send('server');
+        // m3ToConvertor(null);
         callback(null, fs.createReadStream(req.filePath))
         // or
         //   callback(new Error("Server error!"), null)
