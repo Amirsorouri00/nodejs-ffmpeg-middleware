@@ -1,15 +1,20 @@
 const subprocess = require('child_process').fork('subprocess.js');
 var HLSServer = require('hls-server');
 var ffmpeg = require('fluent-ffmpeg');
+var sleep = require('sleep');
 var http = require('http');
 var fs = require('fs');
 
 var server = http.createServer();
 
+
+// http://127.0.0.1:8000/stream/streams.m3u8
+
 const fileDirs = '/home/amirsorouri00/Desktop/opt/nodejs/node-ffmpeg/files'; // Directory that input files are stored
 
 const util = require('util');
 const execFile = util.promisify(require('child_process').execFile);
+
 async function command_runner() {
   const { stdout } = await execFile('node', ['--version']);
   console.log(stdout);
@@ -29,9 +34,20 @@ var hls = new HLSServer(server, {
         // "req" is the http request
         // "callback" must be called with error-first arguments
         console.log("Inside getManifestStream");
-        // subprocess.send('server');
+        var exist = false;
+        fs.access(req.filePath, fs.F_OK, (err) => {
+          if (err) {
+            console.error("doesn't exist any m3u8");
+            subprocess.send('server');
+            sleep.sleep(6);  
+            callback(null, fs.createReadStream(req.filePath))
+          }
+          // file exists
+          else {
+            callback(null, fs.createReadStream(req.filePath))
+          }
+        });
         // m3ToConvertor(null);
-        callback(null, fs.createReadStream(req.filePath))
         // or
         //   callback(new Error("Server error!"), null)
     },

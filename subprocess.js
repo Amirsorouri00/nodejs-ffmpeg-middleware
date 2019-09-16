@@ -17,13 +17,13 @@ function convert(ffmpeg) {
     const fileDirs = '/home/amirsorouri00/Desktop/opt/nodejs/node-ffmpeg/files'; // Directory that input files are stored
     console.log("subprocess starting to convert....")
 
-    ffmpegs('e.mp4', { timeout: 432000 })
+    ffmpegs('gio.mp4', { timeout: 432000 })
     .videoFilters({
       filter: 'drawtext',
       options: {
-        text: 'VERY LONG TEXT VERY VERY VERY VERY LOL!!!',
-        fontsize: 36,
-        fontcolor: 'white',
+        text: 'This is AmirHossein Sorouries TXT. How u like me nowww.',
+        fontsize: 18,
+        fontcolor: 'red',
         x: '(main_w/2-text_w/2)',
         y: '(text_h/2)+15',
         shadowcolor: 'black',
@@ -38,6 +38,7 @@ function convert(ffmpeg) {
     '-hls_time 1',        // 10 second segment duration
     '-hls_list_size 0',    // Maxmimum number of playlist entries (0 means all entries/infinite)
     '-hls_playlist_type event',
+    // '-hls_segment_filename "files/fileSequence%d.ts"',
     '-preset veryfast',
     '-f hls'               // HLS format
     ])
@@ -46,7 +47,7 @@ function convert(ffmpeg) {
         console.log('ffmpeg done. !');
     })
     .on('error', function(stdout, stderr) {
-        console.log('ffmpeg got error. !');
+        console.log(stdout);
     })
     .run()
 }
