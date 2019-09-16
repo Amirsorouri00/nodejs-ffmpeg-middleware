@@ -21,6 +21,7 @@ use demo.jwplayer in Usefull Links and make a request to the url below:
 * http://demo.jwplayer.com/developer-tools/http-stream-tester/
 * https://github.com/t-mullen/hls-server#producing-streams
 * https://github.com/fluent-ffmpeg/node-fluent-ffmpeg
+* https://codeforgeek.com/how-to-check-if-file-exists-node/
 
 
 
