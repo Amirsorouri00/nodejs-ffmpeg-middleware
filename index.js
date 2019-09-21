@@ -8,9 +8,9 @@ var fs = require('fs');
 var server = http.createServer();
 
 
-// http://127.0.0.1:8000/stream/streams.m3u8
+// http://127.0.0.1:8000/streams/stream.m3u8
 
-const fileDirs = '/home/amirsorouri00/Desktop/opt/nodejs/node-ffmpeg/files'; // Directory that input files are stored
+const fileDirs = '/home/amirsorouri00/Desktop/opt/nodejs/node-ffmpeg/files/verytmp'; // Directory that input files are stored
 
 const util = require('util');
 const execFile = util.promisify(require('child_process').execFile);
@@ -18,6 +18,21 @@ const execFile = util.promisify(require('child_process').execFile);
 async function command_runner() {
   const { stdout } = await execFile('node', ['--version']);
   console.log(stdout);
+}
+
+function subst(st){
+  var substr = st.substring(
+    st.lastIndexOf("/") + 1, 
+    st.lastIndexOf("s") + 1
+  ).replace('segment_', '').replace('.ts', '');
+  substr = Number(substr) + 1
+  substr = 'segment_0000' + String(substr) + '.ts'
+  var substr1 = st.substring(
+    st.lastIndexOf("/") + 1, 
+    st.lastIndexOf("s") + 1
+  )
+  rhhh = st.replace(substr1, substr)//.concat(substr)
+  return rhhh;
 }
 
 var hls = new HLSServer(server, {
@@ -38,12 +53,16 @@ var hls = new HLSServer(server, {
         fs.access(req.filePath, fs.F_OK, (err) => {
           if (err) {
             console.error("doesn't exist any m3u8");
-            subprocess.send('server');
-            sleep.sleep(6);  
+            // /* Live Version
+            // subprocess.send('server');
+            // sleep.sleep(1);  
             callback(null, fs.createReadStream(req.filePath))
           }
           // file exists
           else {
+            // Test
+            // subprocess.send('server');
+            // sleep.sleep(6); 
             callback(null, fs.createReadStream(req.filePath))
           }
         });
@@ -53,7 +72,14 @@ var hls = new HLSServer(server, {
     },
     getSegmentStream: function (req, callback) { // return the correct .ts file
       console.log("Inside getSegmentStream")
-      var name = req.filePath.replace('.ts','').concat(["stream.ts"]) //"x".concat([req.filePath]) //
+      
+      var rhhh = subst(req.filePath);
+      console.log(rhhh)
+
+      const subprocess1 = require('child_process').fork('subprocess.js', [rhhh]);
+      subprocess1.send('segment');
+      sleep.msleep(200);
+
       callback(null, fs.createReadStream(req.filePath))
       // setTimeout(mine, 1000);
     }
